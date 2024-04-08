@@ -1,14 +1,10 @@
 # 2021.0210
 [![INFORMS Journal on Computing Logo](https://INFORMSJoC.github.io/logos/INFORMS_Journal_on_Computing_Header.jpg)](https://pubsonline.informs.org/journal/ijoc)
-
-This archive is distributed in association with the INFORMS Journal on Computing under the MIT License.
-This repository contains supporting material for the paper Satisficing Approach to On-Demand Ride-Matching by D.L. Rong, X.Y. Sun, M.L. Zhang and S.C. He.
 # Satisficing Approach to On-Demand Ride-Matching
 
-This archive is distributed in association with the [INFORMS Journal on
-Computing](https://pubsonline.informs.org/journal/ijoc) under the [MIT License](LICENSE).
+This archive is distributed in association with the [INFORMS Journal on Computing](https://pubsonline.informs.org/journal/ijoc) under the [MIT License](LICENSE).
 
-This repository includes the data and the codes for the paper [Satisficing Approach to On-Demand Ride-Matching](Satisficing) by D.L. Rong, X.Y. Sun, M.L. Zhang and S.C. He.
+This repository contains supporting material for the paper "Satisficing Approach to On-Demand Ride-Matching" by D.L. Rong, X.Y. Sun, M.L. Zhang and S.C. H
 
 ## Cite
 
