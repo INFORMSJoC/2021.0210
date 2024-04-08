@@ -85,31 +85,11 @@ def run_simulation(model_type, data_dir, scenario):
             opt_setting['match_time'] = opt_setting['index_interval'] * opt_setting['OPT_Interval']
             opt_setting['drivers'].update(opt_setting['available_drivers'])
             opt_setting['drivers'].update(opt_setting['on_trip_drivers'])
-            
-            """
-            print('第'+ str(opt_setting['index_interval'])+'次匹配')        
-            print("riders:"+str(opt_setting['riders'])) 
-            print("waiting_riders:"+str(opt_setting['waiting_riders']))
-            print("available_drivers:"+str(opt_setting['available_drivers']))
-            print("on_trip_drivers:"+str(opt_setting['on_trip_drivers']))
-            print("waiting_drivers"+str(opt_setting['waiting_drivers']))
-            print("drivers:"+str(opt_setting['drivers']))   
-            """
                 
             model.setup_model(opt_setting, rider_dict = rider_dict.copy(), driver_dict = driver_dict.copy())
             dict_results = model.solve()
             output_dir = data_dir + 'Model_' + model_type + '_Results.csv'
             printResults.print_results(output_dir, dict_results)
-
-
-            """
-            print('orderDisptach_dict:'+str(opt_setting['orderDispatch_dict']))
-            print("orderFulfill_dict:"+str(opt_setting['orderFulfill_dict']))
-            print("used_available_drivers:"+str(opt_setting['available_drivers']))
-            print("used_ontrip_drivers:"+str(opt_setting['on_trip_drivers']))
-            print('orderPickupDistance_dict:'+str(opt_setting['orderPickupDistance_dict']))
-            print('orderDispatch_moment:'+str(opt_setting['orderDispatch_moment']))
-            """
         
             opt_setting['index_interval'] += 1
             opt_setting['updated_riders'] = {}        
