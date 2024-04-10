@@ -54,4 +54,4 @@ In static matching experiments, parameters $N$ and $M$ respectively represent th
 In sequence matching experiments, parameter $T$ refers to the whole time horizon, $OPT\underline{}Interval$ is the time interval of each round of order-matching, $mu\underline{}Driver$ and $mu\underline{}Rider$ indicate respectively the arrival rate of available drivers and trip requests.
 
 ## Requirements
-All optimization problems are solved using CPLEX via Python language.
+To run these codes, one needs Cplex (license required) as well as some of the more commonly used Python libraries, such as Numpy, Pandas, and Random.
