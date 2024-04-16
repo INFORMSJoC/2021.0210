@@ -20,7 +20,7 @@ Below is the BibTex for citing this snapshot of the respoitory.
   publisher =     {INFORMS Journal on Computing},
   title =         {{Satisficing Approach to On-Demand Ride-Matching}},
   year =          {2024},
-  doi =           {10.1287/ijoc.2021.0210},
+  doi =           {10.1287/ijoc.2021.0210.cd},
   url =           {https://github.com/INFORMSJoC/2021.0210},
   note =          {Available for download at https://github.com/INFORMSJoC/2021.0210},
 }  
