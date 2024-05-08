@@ -20,7 +20,7 @@ def make_pickupDistance_dict(model):
                 if j in model.available_drivers_set:
                     pickupDistance_dict[i] = model.distances[i,j]
                 elif j in model.on_trip_drivers_set:  
-                    pickupDistance_dict[i] = model.distances[i,j]
+                    pickupDistance_dict[i] = model.distances[i,j] - model.remain_distance[j]
                 model.setting['orderPickupDistance_dict'][i] = pickupDistance_dict[i]
 
     return pickupDistance_dict
@@ -35,7 +35,7 @@ def make_pickupTime_dict(model):
                 if j in model.available_drivers_set:
                     time_dict[i] = model.distances[i,j] * model.driver_dict[j][1]
                 elif j in model.on_trip_drivers_set:
-                    time_dict[i] = model.distances[i,j] * model.driver_dict[j][1] + 0.5
+                    time_dict[i] = (model.distances[i,j] - model.remain_distance[j]) * model.driver_dict[j][1] 
                 model.setting['orderPickupTime_dict'][i] = time_dict[i]
             
     return time_dict
@@ -56,7 +56,7 @@ def make_orderFulfill_dict(model):
                         orderFulfill_dict[i] = 0
                         model.setting['orderFulfill_dict'][i] = 0
                 elif j in model.on_trip_drivers_set:
-                   if model.setting['match_time'] + model.time_dict[i] <= model.rider_dict[i][0] + model.rider_dict[i][1]:
+                   if model.driver_dict[j][0] + model.time_dict[i] <= model.rider_dict[i][0] + model.rider_dict[i][1]:
                         orderFulfill_dict[i] = 1
                         model.setting['orderFulfill_dict'][i] = 1
                    else:

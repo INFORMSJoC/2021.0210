@@ -45,9 +45,13 @@ def get_data_scenarios(dict_setting):
     
     scenario['travel_speeds'] = np.arange(driver_info['LB_minPerKm'], driver_info['UB_minPerKm']-0.1, -0.5).tolist() 
     scenario['delta_t'] = parameters['Delta_t']
+    scenario['mean_speed'] = 1/2 * (driver_info['LB_minPerKm'] + driver_info['UB_minPerKm'])
+    
+    #print("mean_speed:", scenario['mean_speed'])
+    
     #scenario['distance_remain_max'] = 2*scenario['OPT_Interval']/driver_info['UB_minPerKm']
-    scenario['distance_remain_max'] = scenario['delta_t']/driver_info['UB_minPerKm']
-    scenario['delta_distance'] = 2 * scenario['delta_t']/(driver_info['LB_minPerKm'] + driver_info['UB_minPerKm'])
+    #scenario['distance_remain_max'] = scenario['delta_t']/driver_info['UB_minPerKm']
+    #scenario['delta_distance'] = 2 * scenario['delta_t']/(driver_info['LB_minPerKm'] + driver_info['UB_minPerKm'])
 
     setup_riders_info(scenario, rider_info, parameters) 
     setup_drivers_info(scenario, driver_info, parameters)
@@ -61,7 +65,6 @@ def get_data_scenarios(dict_setting):
 
 
 def setup_riders_info(scenario, rider_info, parameters):
-    #p = np.array([0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.10, 0.60, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01])
     wait_thresholds = np.arange(rider_info['LB_waiting'], rider_info['UB_waiting']+0.1, 0.5).tolist()
     # Setting p value, so the pth percentile of waiting derived from the waiting distribution
     # The generated targeted pick-up time for each rider
@@ -78,9 +81,9 @@ def setup_riders_info(scenario, rider_info, parameters):
         arrival_time = temp_time_r
         #rider_coords = (np.random.uniform() * scenario['o_xmax'], np.random.uniform() * scenario['o_ymax'])
         rider_coords = (np.random.uniform(1/4 * scenario['o_xmax'], 3/4 * scenario['o_xmax']), np.random.uniform(1/4 * scenario['o_ymax'], 3/4 * scenario['o_ymax']))
-        #p = np.array([0.01, 0.01, 0.01, 0.02, 0.05, 0.05, 0.10, 0.15, 0.5, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01])
-        rider_wait = random.sample(wait_thresholds, 1)[0]
+        #p = np.array([0.005, 0.005, 0.02, 0.04, 0.06, 0.08, 0.09, 0.10, 0.50, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01])
         #rider_wait = np.random.choice(wait_thresholds, p= p.ravel())
+        rider_wait = random.sample(wait_thresholds, 1)[0]
         rider_reward = random.sample(order_rewards, 1)[0]
         #rider_targetPickup = pi_p * (random.sample(order_rewards, 1)[0])**alpha
 
@@ -97,9 +100,7 @@ def setup_riders_info(scenario, rider_info, parameters):
 
 def setup_drivers_info(scenario, driver_info, parameters):           
     # Dictionary set for arriving drivers
-    #p_1 = np.array([0.111, 0.111, 0.111, 0.111, 0.111, 0.111, 0.111, 0.111, 0.111, 0, 0, 0.001])
     p_1 = np.array([1/11, 1/11, 1/11, 1/11, 1/11, 1/11, 1/11, 1/11, 1/11, 1/11, 1/11])
-    #p_1 = np.array([1/7, 1/7, 1/7, 1/7, 1/7, 1/7, 1/7])
     driver_wait = driver_info['Wait']
     driver_dict = {}
     temp_time_d = np.random.exponential(1.0/scenario['mu_Driver'], 1).item() 
@@ -109,8 +110,10 @@ def setup_drivers_info(scenario, driver_info, parameters):
         driver_speed = np.random.choice(scenario['travel_speeds'], p=p_1.ravel())
         driver_coords = (np.random.uniform() * scenario['o_xmax'], np.random.uniform() * scenario['o_ymax'])
         #driver_distance_re = np.random.uniform() * scenario['distance_remain_max']
-        driver_distance_re = np.random.uniform(-1, 1) * scenario['distance_remain_max']
-        driver_dict[j] = (arrival_time, driver_speed, driver_coords, driver_wait, driver_distance_re)
+        #remainder = arrival_time % scenario['OPT_Interval']        
+        #driver_distance_re = 2 * remainder/(driver_info['LB_minPerKm'] + driver_info['UB_minPerKm'])    
+        #driver_dict[j] = (arrival_time, driver_speed, driver_coords, driver_wait, driver_distance_re)
+        driver_dict[j] = (arrival_time, driver_speed, driver_coords, driver_wait)
         temp_time_d += np.random.exponential(1.0/scenario['mu_Driver'], 1).item() 
         j += 1
     
@@ -143,7 +146,7 @@ def setup_arriving_list(scenario):
     
 if __name__ == '__main__':
     # test function "load_data"
-    dict_dataLoader = load_data("C:/Users/RDL/Desktop/Forward-looking DynamicOrderDispatch/前瞻/scenario 2.800/")
+    dict_dataLoader = load_data("C:/Users/RDL/Desktop/20240504/T=60，乘客[1,10]分钟等待阈值/scenario 1.050/")
     
     df_parameters = dict_dataLoader['para']
     df_riders = dict_dataLoader['rider']
