@@ -56,13 +56,18 @@ def print_overall_performance(output_dir, setting, rider_dict, driver_dict):
                 
 
     #total order quantities
-    total_order_quantities = len(rider_dict)
+    total_order_quantities = 0
+    for i in range(1, len(rider_dict)+1):
+        if i in setting['riders']:
+            total_order_quantities += 1
+            
     
     #total input decision order quantities
     total_decision_order_quantities = 0
-    for i in range(1, len(rider_dict)+1):
-        if i in setting['riders']:
+    for i in setting['riders']:
+        if rider_dict[i][0] <= max(setting['orderDispatch_moment'].values()):
             total_decision_order_quantities += 1
+            
              
     #total matched order quantities
     total_matched_order_quantities = len(setting['orderDispatch_dict'])
@@ -77,12 +82,14 @@ def print_overall_performance(output_dir, setting, rider_dict, driver_dict):
     # Calculate the order rewards of all orders
     total_orderValue = 0
     for i in range(1, len(rider_dict)+1):
-        total_orderValue += rider_dict[i][3]
+        if i in setting['riders']:
+            total_orderValue += rider_dict[i][3]
       
+
     #order value for decision orders   
     total_decision_orderValue = 0
     for i in range(1, len(rider_dict)+1): 
-        if i  in setting['riders']:
+        if rider_dict[i][0] <= max(setting['orderDispatch_moment'].values()):
             total_decision_orderValue += rider_dict[i][3]
        
     # Calculate the order rewards all matched orders
@@ -120,7 +127,7 @@ if __name__ == '__main__':
     my_dict_1 = {'ID': 1, 'avg_time':3}
     my_dict_2 = {'ID': 2, 'avg_time':5}
     
-    data_dir = "C:/Users/RDL/Desktop/Forward-looking DynamicOrderDispatch/前瞻/scenario 2.800/Test_Print_Results.csv"
+    data_dir = "C:/Users/RDL/Desktop/20240504/T=60，乘客[1,10]分钟等待阈值/scenario 1.050/Test_Print_Results.csv"
     df_value_1 = pd.DataFrame(my_dict_1, index = [0])
     df_value_2 = pd.DataFrame(my_dict_2, index = [0])
     

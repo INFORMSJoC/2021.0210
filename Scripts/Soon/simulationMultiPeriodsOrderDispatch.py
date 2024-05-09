@@ -15,7 +15,7 @@ N_simulations = 300
 
 if __name__ == '__main__':
     # Load the data
-    data_dir = "C:/Users/RDL/Desktop/Forward-looking DynamicOrderDispatch/前瞻/scenario 2.800/"
+    data_dir = "C:/Users/RDL/Desktop/20240504/T=60，乘客[1,10]分钟等待阈值/scenario 1.050/"
     dict_dataLoader = loadData.load_data(data_dir)
     
     list_parameters = dict_dataLoader['para'].to_dict('records')

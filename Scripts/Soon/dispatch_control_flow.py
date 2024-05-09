@@ -18,11 +18,13 @@ def run_simulation(model_type, data_dir, scenario):
 
     OPT_Interval = scenario['OPT_Interval']
     Delta_T = scenario['delta_t']
-    Delta_Distance = scenario['delta_distance']
     arriving_list = scenario['arriving_list']
     rider_dict = scenario['rider_dict']
     driver_dict = scenario['driver_dict']
     T = scenario['T']
+    mean_speed = scenario['mean_speed']
+    
+    
     
     opt_setting = {}
     opt_setting['rider_dict'] = rider_dict
@@ -30,7 +32,7 @@ def run_simulation(model_type, data_dir, scenario):
     opt_setting['T'] = T
     opt_setting['OPT_Interval'] = OPT_Interval
     opt_setting['Delta_T'] = Delta_T
-    opt_setting['Delta_Distance'] = Delta_Distance
+    opt_setting['mean_speed'] = mean_speed
     opt_setting['model_type'] = model_type
     opt_setting['orderDispatch_dict'] = {}
     opt_setting['orderFulfill_dict'] = {}
@@ -52,7 +54,7 @@ def run_simulation(model_type, data_dir, scenario):
     opt_setting['available_drivers'] = {}
     opt_setting['on_trip_drivers'] = {}
     opt_setting['waiting_riders'] = {}
-    opt_setting['waiting_drivers'] = {}
+    #opt_setting['waiting_drivers'] = {}
 
     for k in range(1, len(arriving_list)+1):
         opt_setting['cur_time'] = arriving_list[k][3]
@@ -67,10 +69,8 @@ def run_simulation(model_type, data_dir, scenario):
                 if arriving_list[k][1] == 'Rider':
                     opt_setting['waiting_riders'][arriving_list[k][2]] = 1
                 else:
-                    if abs(driver_dict[arriving_list[k][2]][4]) <= opt_setting['Delta_Distance']:
-                        opt_setting['on_trip_drivers'][arriving_list[k][2]] = 1
-                    else:
-                        opt_setting['waiting_drivers'][arriving_list[k][2]] = 1
+                    opt_setting['on_trip_drivers'][arriving_list[k][2]] = 1
+
         else:
             for i in opt_setting['riders']:
                 if opt_setting['index_interval'] * opt_setting['OPT_Interval'] >= rider_dict[i][0] + rider_dict[i][1]:
@@ -81,15 +81,32 @@ def run_simulation(model_type, data_dir, scenario):
                     opt_setting['available_drivers'][j] = -1
             
 
-    
             opt_setting['match_time'] = opt_setting['index_interval'] * opt_setting['OPT_Interval']
             opt_setting['drivers'].update(opt_setting['available_drivers'])
             opt_setting['drivers'].update(opt_setting['on_trip_drivers'])
+            
+            
+            #print('第'+ str(opt_setting['index_interval'])+'次匹配')        
+            #print("riders:"+str(opt_setting['riders'])) 
+            #print("waiting_riders:"+str(opt_setting['waiting_riders']))
+            #print("available_drivers:"+str(opt_setting['available_drivers']))
+            #print("on_trip_drivers:"+str(opt_setting['on_trip_drivers']))
+            #print("drivers:"+str(opt_setting['drivers']))   
+            
                 
             model.setup_model(opt_setting, rider_dict = rider_dict.copy(), driver_dict = driver_dict.copy())
             dict_results = model.solve()
             output_dir = data_dir + 'Model_' + model_type + '_Results.csv'
             printResults.print_results(output_dir, dict_results)
+
+            
+            #print('orderDisptach_dict:'+str(opt_setting['orderDispatch_dict']))
+            #print("orderFulfill_dict:"+str(opt_setting['orderFulfill_dict']))
+            #print("used_available_drivers:"+str(opt_setting['available_drivers']))
+            #print("used_ontrip_drivers:"+str(opt_setting['on_trip_drivers']))
+            #print('orderPickupDistance_dict:'+str(opt_setting['orderPickupDistance_dict']))
+            #print('orderDispatch_moment:'+str(opt_setting['orderDispatch_moment']))
+            
         
             opt_setting['index_interval'] += 1
             opt_setting['updated_riders'] = {}        
@@ -122,14 +139,6 @@ def run_simulation(model_type, data_dir, scenario):
                 opt_setting['on_trip_drivers'].pop(i, None)  
                                 
                 
-            opt_setting['updated_waiting_drivers'] = {}
-            for i in opt_setting['waiting_drivers'].keys():
-                if driver_dict[i][0] <= opt_setting['index_interval'] * OPT_Interval:
-                    opt_setting['updated_waiting_drivers'][i] = 1
-            opt_setting['available_drivers'].update(opt_setting['updated_waiting_drivers'])     
-
-            for i in opt_setting['updated_waiting_drivers'].keys():
-                opt_setting['waiting_drivers'].pop(i, None)
                     
             if arriving_list[k][1] == 'Rider':
                 if arriving_list[k][3] <= opt_setting['index_interval'] * opt_setting['OPT_Interval']:
@@ -140,10 +149,7 @@ def run_simulation(model_type, data_dir, scenario):
                 if arriving_list[k][3] <= opt_setting['index_interval'] * opt_setting['OPT_Interval']:
                     opt_setting['available_drivers'][arriving_list[k][2]] = 1
                 else:
-                    if abs(driver_dict[arriving_list[k][2]][4]) <= opt_setting['Delta_Distance']:
-                        opt_setting['on_trip_drivers'][arriving_list[k][2]] = 1
-                    else:
-                        opt_setting['waiting_drivers'][arriving_list[k][2]] = 1
+                    opt_setting['on_trip_drivers'][arriving_list[k][2]] = 1
 
 
     printResults.print_overall_performance(data_dir, opt_setting, rider_dict, driver_dict)

@@ -33,6 +33,7 @@ class OrderDispatch_III:
         self.model.drivers_set = set()
         self.model.available_drivers_set = set()
         self.model.on_trip_drivers_set = set()
+        self.model.remain_distance = {}
         self.model.distances = {}
         
         
@@ -63,10 +64,12 @@ class OrderDispatch_III:
                         dx = self.model.rider_dict[i][2][0] - self.model.driver_dict[j][2][0]
                         dy = self.model.rider_dict[i][2][1] - self.model.driver_dict[j][2][1]
                         d2 = sqrt(dx*dx + dy*dy)
-                        d_re = self.model.driver_dict[j][4]
+                        d_re = (self.model.driver_dict[j][0] - self.model.setting['match_time'])/self.model.setting['mean_speed']
+                        self.model.remain_distance[j] = d_re
                         self.model.distances[i, j] = d2 + d_re 
                         self.model.on_trip_drivers_set.add(j)
-                    
+                        
+        #print("Remain_distance:"+ str(self.model.remain_distance))            
         #print('Distance:'+str(self.model.distances))
         #print('available_drivers_set:'+str(self.model.available_drivers_set))
         #print('on_trip_drivers_set:'+str(self.model.on_trip_drivers_set))
@@ -88,7 +91,7 @@ class OrderDispatch_III:
         
         self.riders_targetPickup_updated = {}        
         for i in self.model.riders_set:
-            self.riders_targetPickup_updated[i] = self.model.rider_dict[i][4] - self.model.rider_consumed_time[i] - 0.5
+            self.riders_targetPickup_updated[i] = self.model.rider_dict[i][4] - self.model.rider_consumed_time[i] 
 
         
         distances_min = {}
