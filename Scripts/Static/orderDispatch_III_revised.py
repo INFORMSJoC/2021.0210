@@ -2,7 +2,8 @@
 """
 Created on Thu Aug 27 11:09:27 2020
 
-Order dispatch optimization: Maximize the joint target oriented probability
+Order dispatch optimization: Satisficing Approach(SA)
+(Maximize the joint target oriented probability)
 
 @author: Meilin Zhang
 """

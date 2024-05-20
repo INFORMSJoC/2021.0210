@@ -75,16 +75,11 @@ def get_data_scenarios(dict_setting):
     
     
     p = np.array([0.005, 0.005, 0.02, 0.04, 0.06, 0.08, 0.09, 0.10, 0.50, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01])
-    #p = np.array([0.005, 0.005, 0.02, 0.03, 0.44, 0.03, 0.03, 0.03, 0.41])
     riders_wait = {i: np.random.choice(wait_thresholds, p = p.ravel())for i in rider_range}
     #riders_wait = {i: random.sample(wait_thresholds, 1)[0] for i in rider_range}
     #print("riders_wait:", riders_wait )
     
 
-    #p_1 = np.array([0.045, 0.045, 0.10, 0.10, 0.30, 0.15, 0.10, 0.10, 0.05, 0.005, 0.005])
-    #v\in[3,8]
-    #p_1 = np.array([0.001, 0.001, 0.050, 0.150, 0.350, 0.150, 0.100, 0.100, 0.050, 0.024, 0.024])
-    #drivers_speed = {j: np.random.choice(travel_speeds, p = p_1.ravel()) for j in driver_range}
     drivers_speed = {j: random.sample(travel_speeds, 1)[0] for j in driver_range}
     #print("drivers_speed:",drivers_speed)
     
@@ -118,7 +113,6 @@ def get_data_scenarios(dict_setting):
 
 
     riders_targetPickup = {i: pi_p * (r_star/riders_reward[i])**alpha for i in rider_range}
-    #riders_targetPickup = {i: 5.5 * (r_star/riders_reward[i])**alpha for i in rider_range}
     #print("riders_targetPickup:", riders_targetPickup)
     
     
@@ -137,9 +131,7 @@ def get_data_scenarios(dict_setting):
             
     #print("distances_min:", distances_min)
     #print("riders_targetPickup_updated:", riders_targetPickup_updated)
-            
-    
-    
+                
     
     # print(np.arange(1, 0, -1/len(travel_speeds)))
     
@@ -147,13 +139,6 @@ def get_data_scenarios(dict_setting):
     travel_speeds_CDF = np.arange(1, 0, -1/len(travel_speeds)).tolist()
     
     
-    #travel_speeds_CDF = [1.00, 0.955, 0.910, 0.810, 0.710, 0.410, 0.260, 0.160, 0.060, 0.010, 0.005]
-    #travel_speeds_lnCDF = [0, -0.046, -0.094, -0.211, -0.342, -0.892, -1.347, -1.833, -2.813, -4.605, -5.298]
-    
-    
-    # F_[3,8] & LnF_{3,8}
-    #travel_speeds_CDF = [1.00, 0.999, 0.998, 0.948, 0.798, 0.448, 0.298, 0.198, 0.098, 0.048, 0.024]
-    #travel_speeds_lnCDF = [0, -0.001, -0.002, -0.053, -0.226, -0.803, -1.211, -1.619, -2.323, -3.037, -3.730]
     def return_position(arr, val):
         i = 0
         while i < len(arr) and arr[i] > val:
@@ -185,7 +170,7 @@ def get_data_scenarios(dict_setting):
            
 if __name__ == '__main__':
     # test function "load_data"
-    dict_dataLoader = load_data("C:/Users/18640/Desktop/组会文件/第一篇论文第三轮修改/New simulation/Table 1/")
+    dict_dataLoader = load_data("C:/Users/RDL/Desktop/Static/")
     
     df_parameters = dict_dataLoader['para']
     df_riders = dict_dataLoader['rider']
