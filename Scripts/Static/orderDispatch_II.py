@@ -2,7 +2,7 @@
 """
 Created on Thu Aug 27 11:09:27 2020
 
-Order dispatch optimization: Maximize the joint target oriented probability
+Order dispatch optimization: High-Value Trips First(HVTF)
 
 @author: Meilin Zhang
 """
@@ -11,7 +11,7 @@ import numpy as py
 import pandas as pd
 import random
 import numpy as np
-import orderRealizationStats_greedyMatches
+import orderRealizationStats_HVTFMatches
 import time
 
 
@@ -24,7 +24,7 @@ except:
 
 class OrderDispatch_II:
     def __init__(self):
-        self.model = Model("Greedy Matches")
+        self.model = Model("HVTF Matches")
 
     def setup_model(self, scenario):
         # clears the model of all modeling objects.
@@ -109,7 +109,7 @@ class OrderDispatch_II:
         #return { self.sol_vec[i]: i+1 for i in range(self.N)}
 
     def solve(self):
-        return orderRealizationStats_greedyMatches.make_performance_stats(self)
+        return orderRealizationStats_HVTFMatches.make_performance_stats(self)
 
 
 

@@ -18,7 +18,7 @@ if __name__ == '__main__':
     my_dict_1 = {'ID': 1, 'avg_time':3}
     my_dict_2 = {'ID': 2, 'avg_time':5}
     
-    data_dir = "C:/Users/18640/Desktop/组会文件/第一篇论文第三轮修改/New simulation/Table 1/Test_Print_Results.csv"
+    data_dir = "C:/Users/RDL/Desktop/Static/Test_Print_Results.csv"
     df_value_1 = pd.DataFrame(my_dict_1, index = [0])
     df_value_2 = pd.DataFrame(my_dict_2, index = [0])
     

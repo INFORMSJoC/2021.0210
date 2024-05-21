@@ -2,7 +2,7 @@
 """
 Created on Fri Nov 27 10:41:45 2020
 
-Order dispatch optimization: minimize the total pick-up distance
+Order dispatch optimization: Minimize Total Pickup Distance(MTPD)
 
 @author: Meilin Zhang
 """

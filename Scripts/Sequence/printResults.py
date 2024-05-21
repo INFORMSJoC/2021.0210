@@ -63,15 +63,22 @@ def print_overall_performance(output_dir, setting, rider_dict, driver_dict):
     else:
         avg_pickup_distance = 0
                         
-
     #print('orderDisptach_dict:'+str(setting['orderDisptach_dict']))
-    # Calculate the order rewards of all orders
-    total_orderValue = 0
-    for i in range(1, len(rider_dict)+1):
-        total_orderValue += rider_dict[i][3]
+
         
     #total order quantities
-    total_order_quantities = len(rider_dict)
+    total_order_quantities = 0
+    for i in range(1, len(rider_dict)+1):
+        if i in setting['riders']:
+            total_order_quantities += 1
+            
+
+   #total input decision order quantities
+    total_decision_order_quantities = 0
+    for i in range(1, len(rider_dict)+1):
+        if i in setting['riders']:
+            if rider_dict[i][0] <= max(setting['orderDispatch_moment'].values()):
+                total_decision_order_quantities += 1
     
     #total matched order quantities
     total_matched_order_quantities = len(setting['orderDispatch_dict'])
@@ -81,6 +88,20 @@ def print_overall_performance(output_dir, setting, rider_dict, driver_dict):
     for i in setting['orderDispatch_dict']:
         if setting['orderFulfill_dict'][i] == 1:
             total_fulfill_order_quantities += 1
+
+    # Calculate the order rewards of all orders
+    total_orderValue = 0
+    for i in range(1, len(rider_dict)+1):
+        if i in setting['riders']:
+            total_orderValue += rider_dict[i][3]
+
+    #order value for decision orders   
+    total_decision_orderValue = 0
+    for i in range(1, len(rider_dict)+1): 
+        if i  in setting['riders']:
+            if rider_dict[i][0] <= max(setting['orderDispatch_moment'].values()):
+                total_decision_orderValue += rider_dict[i][3]
+
     
     # Calculate the order rewards all matched orders
     total_matched_orderValue = 0
@@ -92,16 +113,9 @@ def print_overall_performance(output_dir, setting, rider_dict, driver_dict):
         if setting['orderFulfill_dict'][i] == 1:
             total_fulfillValue += rider_dict[i][3]
     
-    # Calculate the order fulfill rate
-    if len(setting['orderFulfill_dict']) > 0:
-        matched_order_fulfill_rate = sum(setting['orderFulfill_dict'].values())/ total_matched_order_quantities
-    else:
-        matched_order_fulfill_rate = 0
-
-    if len(setting['orderFulfill_dict']) > 0:
-        total_order_fulfill_rate = sum(setting['orderFulfill_dict'].values())/total_order_quantities
-    else:
-        total_order_fulfill_rate = -1
+    matched_order_fulfill_rate = sum(setting['orderFulfill_dict'].values())/total_matched_order_quantities
+    decision_order_fulfill_rate = sum(setting['orderFulfill_dict'].values())/total_decision_order_quantities
+    total_order_fulfill_rate = sum(setting['orderFulfill_dict'].values())/total_order_quantities
 
     ID = setting['ID']
     data_dir = output_dir + 'Model_'+ setting['model_type'] +'_Overall_Results.csv'
@@ -109,18 +123,18 @@ def print_overall_performance(output_dir, setting, rider_dict, driver_dict):
     
     print_results(data_dir, {'ID':ID,'total_order_quantities':total_order_quantities, 'total_matched_order_quantities':total_matched_order_quantities,
                              'total_fulfill_order_quantities':total_fulfill_order_quantities, 'avg_pickup_time': avg_pickup_time,
-                             'avg_pickup_distance': avg_pickup_distance,'total_orderValue': total_orderValue,
+                             'avg_pickup_distance': avg_pickup_distance,'total_orderValue': total_orderValue, 
+                             'total_decision_orderValue':total_decision_orderValue,
                              'total_matched_orderValue': total_matched_orderValue, 'total_fulfillValue': total_fulfillValue,
-                             'matched_order_fulfill_rate': matched_order_fulfill_rate,
+                             'matched_order_fulfill_rate': matched_order_fulfill_rate, 'decision_order_fulfill_rate':decision_order_fulfill_rate,
                              'total_order_fulfill_rate': total_order_fulfill_rate })
-    
    
 
 if __name__ == '__main__': 
     my_dict_1 = {'ID': 1, 'avg_time':3}
     my_dict_2 = {'ID': 2, 'avg_time':5}
     
-    data_dir = "C:/Users/RDL/Desktop/dynamic simulation/45s/Test_Print_Results.csv"
+    data_dir = "C:/Users/RDL/Desktop/20240420/dynamic and no forward-looking/5分钟等待阈值，T=30/90s/Test_Print_Results.csv"
     df_value_1 = pd.DataFrame(my_dict_1, index = [0])
     df_value_2 = pd.DataFrame(my_dict_2, index = [0])
     
